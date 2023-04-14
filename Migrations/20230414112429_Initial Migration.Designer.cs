@@ -12,8 +12,8 @@ using MyScheduler.Data;
 namespace MyScheduler.Migrations
 {
     [DbContext(typeof(MySchedulerDbContext))]
-    [Migration("20230412164535_New Migration")]
-    partial class NewMigration
+    [Migration("20230414112429_Initial Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace MyScheduler.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("GroupScheduleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -140,20 +143,23 @@ namespace MyScheduler.Migrations
 
             modelBuilder.Entity("MyScheduler.Models.TeachersSubjects", b =>
                 {
-                    b.Property<Guid>("TeacherId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("TeachersSubjectId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeachersSubjectId"));
 
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TeacherId1")
+                    b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
-                    b.HasKey("TeacherId", "SubjectId");
+                    b.HasKey("TeachersSubjectId");
 
                     b.HasIndex("SubjectId");
 
-                    b.HasIndex("TeacherId1");
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("TeachersSubjects");
                 });
@@ -198,7 +204,7 @@ namespace MyScheduler.Migrations
 
                     b.HasOne("MyScheduler.Models.Teacher", "Teacher")
                         .WithMany("TeachersSubjects")
-                        .HasForeignKey("TeacherId1")
+                        .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -209,8 +215,7 @@ namespace MyScheduler.Migrations
 
             modelBuilder.Entity("MyScheduler.Models.Group", b =>
                 {
-                    b.Navigation("GroupSchedule")
-                        .IsRequired();
+                    b.Navigation("GroupSchedule");
                 });
 
             modelBuilder.Entity("MyScheduler.Models.Schedule", b =>

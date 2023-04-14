@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace MyScheduler.Migrations
 {
     /// <inheritdoc />
-    public partial class NewMigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +17,8 @@ namespace MyScheduler.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GroupScheduleId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -76,13 +76,14 @@ namespace MyScheduler.Migrations
                 name: "TeachersSubjects",
                 columns: table => new
                 {
-                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubjectId = table.Column<int>(type: "int", nullable: false),
-                    TeacherId1 = table.Column<int>(type: "int", nullable: false)
+                    TeachersSubjectId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TeacherId = table.Column<int>(type: "int", nullable: false),
+                    SubjectId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeachersSubjects", x => new { x.TeacherId, x.SubjectId });
+                    table.PrimaryKey("PK_TeachersSubjects", x => x.TeachersSubjectId);
                     table.ForeignKey(
                         name: "FK_TeachersSubjects_Subjects_SubjectId",
                         column: x => x.SubjectId,
@@ -90,8 +91,8 @@ namespace MyScheduler.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TeachersSubjects_Teachers_TeacherId1",
-                        column: x => x.TeacherId1,
+                        name: "FK_TeachersSubjects_Teachers_TeacherId",
+                        column: x => x.TeacherId,
                         principalTable: "Teachers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -147,9 +148,9 @@ namespace MyScheduler.Migrations
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeachersSubjects_TeacherId1",
+                name: "IX_TeachersSubjects_TeacherId",
                 table: "TeachersSubjects",
-                column: "TeacherId1");
+                column: "TeacherId");
         }
 
         /// <inheritdoc />

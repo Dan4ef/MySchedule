@@ -62,7 +62,17 @@ namespace MyScheduler.Data
             //одни викладач може вести багато предметів
             //так і один предмет ведуть різні викладачі 
             builder.Entity<TeachersSubjects>()
-                .HasKey(ts => new { ts.TeacherId, ts.SubjectId });
+                .HasKey(ts => ts.TeachersSubjectId);
+
+            builder.Entity<Teacher>()
+                .HasMany<TeachersSubjects>(teacher => teacher.TeachersSubjects)
+                .WithOne(teachersubject => teachersubject.Teacher)
+                .HasForeignKey(teachersubject => teachersubject.TeacherId);
+
+            builder.Entity<Subject>()
+                .HasMany<TeachersSubjects>(subject => subject.TeachersSubjects)
+                .WithOne(teacherssubjects => teacherssubjects.Subject)
+                .HasForeignKey(teacherssubject => teacherssubject.SubjectId);
         }
     }
 }
