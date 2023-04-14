@@ -2,9 +2,12 @@
 {
     public class Subject
     {
-        public Guid  Id { get; set; } 
+        public int  Id { get; set; } 
         public string Name { get; set; }
         public string Place { get; set; }
-        public int TeacherId { get; set; }
+        
+        public IList<TeachersSubjects> TeachersSubjects { get; set; }
+
+        public ICollection<Pair> SubjectsOfPairs { get; set; }
     }
 }

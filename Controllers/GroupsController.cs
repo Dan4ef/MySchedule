@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MyScheduler.CreationModels;
 using MyScheduler.Data;
 using MyScheduler.Models;
 
@@ -28,7 +29,7 @@ namespace MyScheduler.Controllers
         }
 
         // GET: Groups/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Groups == null)
             {
@@ -56,12 +57,20 @@ namespace MyScheduler.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Group @group)
+        public async Task<IActionResult> Create([Bind("Name,Token")] CreateGroupModel @group)//ось тут
+                                                                                             //так прописати
+                                                                                             //using Create...Model
+        //легше було б генерувати контроллери з CreationModels чи Models?? все одно редагувати треба буде
         {
             if (ModelState.IsValid)
             {
-                @group.Id = Guid.NewGuid();
-                _context.Add(@group);
+                var entity = new Group()//ще отак зробити в кожному
+                {
+                    Name = @group.Name,
+                    Token= @group.Token
+                };//все ще це
+
+                var result = await _context.AddAsync(entity);//а тут entity
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -69,7 +78,7 @@ namespace MyScheduler.Controllers
         }
 
         // GET: Groups/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Groups == null)
             {
@@ -89,7 +98,7 @@ namespace MyScheduler.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name")] Group @group)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Token")] Group @group)
         {
             if (id != @group.Id)
             {
@@ -120,7 +129,7 @@ namespace MyScheduler.Controllers
         }
 
         // GET: Groups/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Groups == null)
             {
@@ -140,7 +149,7 @@ namespace MyScheduler.Controllers
         // POST: Groups/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Groups == null)
             {
@@ -156,7 +165,7 @@ namespace MyScheduler.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GroupExists(Guid id)
+        private bool GroupExists(int id)
         {
           return (_context.Groups?.Any(e => e.Id == id)).GetValueOrDefault();
         }

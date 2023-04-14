@@ -19,10 +19,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.SubjectId)
+                @Html.DisplayNameFor(model => model.DayOfWeek)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subject)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Schedule)
             </th>
             <th></th>
         </tr>
@@ -31,10 +37,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.SubjectId)
+                @Html.DisplayFor(modelItem => item.DayOfWeek)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Subject.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Schedule.Id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

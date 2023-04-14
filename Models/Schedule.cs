@@ -2,16 +2,16 @@
 {
     public class Schedule
     {
-        public Guid Id { get; set; }
-        public int GroupId { get; set; }
-        public string Days { get; set; }
-        /*????
-        class Schedule(object):
-        tablename = "schedules"
-        def __init__(self, groupId, days):
-        self.id = str(uuid.uuid4())
-        self.groupId = groupId
-        self.days = days */
+        public int Id { get; set; }
+        
+        public string Token { get; set; }
+
+        public int GroupId { get; set; }//посилаємось на GroupId - записане в полі id об'єкту класу Group
+        public Group Group { get; set; }
+        
+        //навігаційна властивість - список пар, в одному розкладі багато пар - один до багатьох
+        public ICollection<Pair> scheduleItems { get; set; }
+
 
     }
 }
