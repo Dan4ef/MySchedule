@@ -1,6 +1,6 @@
 namespace MyScheduler.CreationModels
 {
-    public class Pair
+    public class CreatePairModel
     {
         public int Id { get; set; }
         
