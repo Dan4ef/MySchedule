@@ -12,7 +12,7 @@ using MyScheduler.Data;
 namespace MyScheduler.Migrations
 {
     [DbContext(typeof(MySchedulerDbContext))]
-    [Migration("20230410163434_Initial-Migration")]
+    [Migration("20230415203144_Initial Migration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
