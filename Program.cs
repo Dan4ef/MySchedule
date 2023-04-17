@@ -9,12 +9,13 @@ builder.Services.AddDbContext<MySchedulerDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("MySchedulerDefaultConnection")));
 
 var MyAllowSpecificOrigins = "*";
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:3000");
+                          policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
                       });
 });
 
