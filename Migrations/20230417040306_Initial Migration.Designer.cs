@@ -12,7 +12,7 @@ using MyScheduler.Data;
 namespace MyScheduler.Migrations
 {
     [DbContext(typeof(MySchedulerDbContext))]
-    [Migration("20230415203144_Initial Migration")]
+    [Migration("20230417040306_Initial Migration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -46,8 +46,8 @@ namespace MyScheduler.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("SubjectId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Time")
                         .IsRequired()
@@ -64,12 +64,8 @@ namespace MyScheduler.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Days")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -90,8 +86,8 @@ namespace MyScheduler.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TeacherId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
