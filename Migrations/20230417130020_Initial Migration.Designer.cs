@@ -12,7 +12,7 @@ using MyScheduler.Data;
 namespace MyScheduler.Migrations
 {
     [DbContext(typeof(MySchedulerDbContext))]
-    [Migration("20230417040306_Initial Migration")]
+    [Migration("20230417130020_Initial Migration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -46,6 +46,9 @@ namespace MyScheduler.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ScheduleId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uniqueidentifier");
 
@@ -55,6 +58,8 @@ namespace MyScheduler.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ScheduleId");
+
                     b.ToTable("Pairs");
                 });
 
@@ -63,6 +68,10 @@ namespace MyScheduler.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Days")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uniqueidentifier");
@@ -107,6 +116,22 @@ namespace MyScheduler.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Teachers");
+                });
+
+            modelBuilder.Entity("MyScheduler.Models.Pair", b =>
+                {
+                    b.HasOne("MyScheduler.Models.Schedule", "Schedule")
+                        .WithMany("Pairs")
+                        .HasForeignKey("ScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Schedule");
+                });
+
+            modelBuilder.Entity("MyScheduler.Models.Schedule", b =>
+                {
+                    b.Navigation("Pairs");
                 });
 #pragma warning restore 612, 618
         }

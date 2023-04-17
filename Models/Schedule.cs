@@ -11,5 +11,7 @@ namespace MyScheduler.Models
 
         [Required]
         public string Days { get; set; }
+
+        public List<Pair> Pairs { get; }
     }
 }

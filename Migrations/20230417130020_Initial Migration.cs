@@ -24,24 +24,12 @@ namespace MyScheduler.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pairs",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Time = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pairs", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Schedules",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Days = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -73,6 +61,31 @@ namespace MyScheduler.Migrations
                 {
                     table.PrimaryKey("PK_Teachers", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Pairs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ScheduleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pairs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Pairs_Schedules_ScheduleId",
+                        column: x => x.ScheduleId,
+                        principalTable: "Schedules",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pairs_ScheduleId",
+                table: "Pairs",
+                column: "ScheduleId");
         }
 
         /// <inheritdoc />
@@ -85,13 +98,13 @@ namespace MyScheduler.Migrations
                 name: "Pairs");
 
             migrationBuilder.DropTable(
-                name: "Schedules");
-
-            migrationBuilder.DropTable(
                 name: "Subjects");
 
             migrationBuilder.DropTable(
                 name: "Teachers");
+
+            migrationBuilder.DropTable(
+                name: "Schedules");
         }
     }
 }

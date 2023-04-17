@@ -10,5 +10,7 @@ namespace MyScheduler.Models
         [Required]
         public string Time { get; set; }
 
+        public Guid ScheduleId { get; set; }
+        public Schedule Schedule { get; set; }
     }
 }

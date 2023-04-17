@@ -20,7 +20,9 @@ namespace MyScheduler.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Pair>>> GetTodoItems()
         {
-            return await _context.Pairs.ToListAsync();
+            return await _context.Pairs
+                .Include(p => p.ScheduleId)
+                .ToListAsync();
         }
 
         // GET: pairs/:id
