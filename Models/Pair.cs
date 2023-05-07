@@ -6,11 +6,9 @@ namespace MyScheduler.Models
     {
         public Guid Id { get; set; }
         public Guid SubjectId { get; set; }
-        
+        public Subject Subject { get; set; }
+
         [Required]
         public string Time { get; set; }
-
-        public Guid ScheduleId { get; set; }
-        public Schedule Schedule { get; set; }
     }
 }

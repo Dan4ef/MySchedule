@@ -48,7 +48,9 @@ namespace MyScheduler.Controllers
         [HttpPost]
         public async Task<ActionResult<Schedule>> PostSchedule(Schedule schedule)
         {
-            _context.Schedules.Add(schedule);
+            Console.WriteLine("Schedule");
+            Console.WriteLine(schedule);
+            // _context.Schedules.Add(schedule);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetSchedule), new { id = schedule.Id }, schedule);

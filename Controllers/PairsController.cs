@@ -21,7 +21,7 @@ namespace MyScheduler.Controllers
         public async Task<ActionResult<IEnumerable<Pair>>> GetTodoItems()
         {
             return await _context.Pairs
-                .Include(p => p.ScheduleId)
+                .Include(p => p.SubjectId)
                 .ToListAsync();
         }
 
@@ -29,7 +29,6 @@ namespace MyScheduler.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Pair>> GetPair(Guid id)
         {
-
             var pair = await _context.Pairs.FindAsync(id);
 
             if (pair == null)
@@ -38,7 +37,6 @@ namespace MyScheduler.Controllers
             }
 
             return pair;
-
         }
 
         // POST: pairs

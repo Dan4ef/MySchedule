@@ -28,8 +28,7 @@ namespace MyScheduler.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Days = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -63,28 +62,61 @@ namespace MyScheduler.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pairs",
+                name: "ScheduleItem",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ScheduleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pairs", x => x.Id);
+                    table.PrimaryKey("PK_ScheduleItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Pairs_Schedules_ScheduleId",
+                        name: "FK_ScheduleItem_Schedules_ScheduleId",
                         column: x => x.ScheduleId,
                         principalTable: "Schedules",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Pairs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ScheduleItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pairs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Pairs_ScheduleItem_ScheduleItemId",
+                        column: x => x.ScheduleItemId,
+                        principalTable: "ScheduleItem",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Pairs_Subjects_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Pairs_ScheduleId",
+                name: "IX_Pairs_ScheduleItemId",
                 table: "Pairs",
+                column: "ScheduleItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pairs_SubjectId",
+                table: "Pairs",
+                column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScheduleItem_ScheduleId",
+                table: "ScheduleItem",
                 column: "ScheduleId");
         }
 
@@ -98,10 +130,13 @@ namespace MyScheduler.Migrations
                 name: "Pairs");
 
             migrationBuilder.DropTable(
-                name: "Subjects");
+                name: "Teachers");
 
             migrationBuilder.DropTable(
-                name: "Teachers");
+                name: "ScheduleItem");
+
+            migrationBuilder.DropTable(
+                name: "Subjects");
 
             migrationBuilder.DropTable(
                 name: "Schedules");

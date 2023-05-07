@@ -43,7 +43,7 @@ namespace MyScheduler.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ScheduleId")
+                    b.Property<Guid?>("ScheduleItemId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SubjectId")
@@ -55,7 +55,9 @@ namespace MyScheduler.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ScheduleId");
+                    b.HasIndex("ScheduleItemId");
+
+                    b.HasIndex("SubjectId");
 
                     b.ToTable("Pairs");
                 });
@@ -66,16 +68,28 @@ namespace MyScheduler.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Days")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.ToTable("Schedules");
+                });
+
+            modelBuilder.Entity("MyScheduler.Models.ScheduleItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ScheduleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScheduleId");
+
+                    b.ToTable("ScheduleItem");
                 });
 
             modelBuilder.Entity("MyScheduler.Models.Subject", b =>
@@ -117,16 +131,34 @@ namespace MyScheduler.Migrations
 
             modelBuilder.Entity("MyScheduler.Models.Pair", b =>
                 {
-                    b.HasOne("MyScheduler.Models.Schedule", "Schedule")
+                    b.HasOne("MyScheduler.Models.ScheduleItem", null)
                         .WithMany("Pairs")
-                        .HasForeignKey("ScheduleId")
+                        .HasForeignKey("ScheduleItemId");
+
+                    b.HasOne("MyScheduler.Models.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Schedule");
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("MyScheduler.Models.ScheduleItem", b =>
+                {
+                    b.HasOne("MyScheduler.Models.Schedule", null)
+                        .WithMany("Days")
+                        .HasForeignKey("ScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyScheduler.Models.Schedule", b =>
+                {
+                    b.Navigation("Days");
+                });
+
+            modelBuilder.Entity("MyScheduler.Models.ScheduleItem", b =>
                 {
                     b.Navigation("Pairs");
                 });
